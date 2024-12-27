@@ -121,15 +121,15 @@ public class ProdutosDAO {
         
     }
     
-    public List<ProdutosDTO> listaProduto (){
-        String jQuery = "SELECT * FROM produtos p WHERE status LIKE %Vendido% ";
+    public ArrayList<ProdutosDTO> listarProdutosVendidos (){
+        String jQuery = "SELECT id, nome, valor, status FROM produtos p WHERE status LIKE 'Vendido' ";
         
         try{
             if(conectar()){
                 prep = conn.prepareStatement(jQuery);
                 
                 resultset = prep.executeQuery();
-                List<ProdutosDTO> lista = new ArrayList();
+                ArrayList<ProdutosDTO> lista = new ArrayList();
                 while(resultset.next()){
                     ProdutosDTO p = new ProdutosDTO();
                     p.setId(resultset.getInt("id"));
@@ -145,7 +145,7 @@ public class ProdutosDAO {
             }
             
         }catch(Exception ex){
-            System.out.println("Erro ao consultar filme."+ ex.getMessage());
+            System.out.println("Erro ao consultar produto."+ ex.getMessage());
             return null;
         }finally {
             desconectar();
