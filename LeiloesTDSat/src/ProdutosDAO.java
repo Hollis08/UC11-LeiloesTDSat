@@ -101,13 +101,13 @@ public class ProdutosDAO {
         return listagem;
     }
     
-    public void venderProduto(ProdutosDTO p){
-        String jQuery = "UPDATE produtos SET status = 'vendido' WHERE id = ?";
+    public void venderProduto(String id){
+        String jQuery = "UPDATE produtos SET status = 'Vendido' WHERE id = ? ";
         try{
             if(conectar()){
              prep = conn.prepareStatement(jQuery);
              
-             prep.setInt(2, p.getId());
+             prep.setInt(1, Integer.parseInt(id));
              
              prep.executeUpdate();
              JOptionPane.showMessageDialog(null, "Produto vendido!");
