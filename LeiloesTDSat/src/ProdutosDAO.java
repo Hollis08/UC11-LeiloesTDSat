@@ -101,8 +101,56 @@ public class ProdutosDAO {
         return listagem;
     }
     
-    
-    
+    public void venderProduto(String id){
+        String jQuery = "UPDATE produtos SET status = 'Vendido' WHERE id = ? ";
+        try{
+            if(conectar()){
+             prep = conn.prepareStatement(jQuery);
+             
+             prep.setInt(1, Integer.parseInt(id));
+             
+             prep.executeUpdate();
+             JOptionPane.showMessageDialog(null, "Produto vendido!");
+            }
         
+        }catch(Exception ex){
+            JOptionPane.showMessageDialog(null, "Erro ao atuzalizar "+ ex.getMessage());
+        }finally {
+            desconectar();
+        }
+        
+    }
+    
+    public ArrayList<ProdutosDTO> listarProdutosVendidos (){
+        String jQuery = "SELECT id, nome, valor, status FROM produtos p WHERE status LIKE 'Vendido' ";
+        
+        try{
+            if(conectar()){
+                prep = conn.prepareStatement(jQuery);
+                
+                resultset = prep.executeQuery();
+                ArrayList<ProdutosDTO> lista = new ArrayList();
+                while(resultset.next()){
+                    ProdutosDTO p = new ProdutosDTO();
+                    p.setId(resultset.getInt("id"));
+                    p.setNome(resultset.getString("nome"));
+                    p.setStatus(resultset.getString("status"));
+                    p.setValor(resultset.getInt("valor"));
+                    lista.add(p);
+                }
+                return lista;
+            }else {
+                JOptionPane.showMessageDialog(null, "Erro ao conectar ao banco de dados.");
+                return null;
+            }
+            
+        }catch(Exception ex){
+            System.out.println("Erro ao consultar produto."+ ex.getMessage());
+            return null;
+        }finally {
+            desconectar();
+        }
+    }
+    
 }
 
