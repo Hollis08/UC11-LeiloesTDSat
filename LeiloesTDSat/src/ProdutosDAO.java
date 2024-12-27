@@ -105,7 +105,7 @@ public class ProdutosDAO {
         String jQuery = "UPDATE produtos SET status = 'vendido' WHERE id = ?";
         try{
             if(conectar()){
-             PreparedStatement st = conn.prepareStatement(jQuery);
+             prep = conn.prepareStatement(jQuery);
              
              prep.setInt(2, p.getId());
              
@@ -121,7 +121,36 @@ public class ProdutosDAO {
         
     }
     
-    
+    public List<ProdutosDTO> listaProduto (){
+        String jQuery = "SELECT * FROM produtos p WHERE status LIKE %Vendido% ";
         
+        try{
+            if(conectar()){
+                prep = conn.prepareStatement(jQuery);
+                
+                resultset = prep.executeQuery();
+                List<ProdutosDTO> lista = new ArrayList();
+                while(resultset.next()){
+                    ProdutosDTO p = new ProdutosDTO();
+                    p.setId(resultset.getInt("id"));
+                    p.setNome(resultset.getString("nome"));
+                    p.setStatus(resultset.getString("status"));
+                    p.setValor(resultset.getInt("valor"));
+                    lista.add(p);
+                }
+                return lista;
+            }else {
+                JOptionPane.showMessageDialog(null, "Erro ao conectar ao banco de dados.");
+                return null;
+            }
+            
+        }catch(Exception ex){
+            System.out.println("Erro ao consultar filme."+ ex.getMessage());
+            return null;
+        }finally {
+            desconectar();
+        }
+    }
+    
 }
 
